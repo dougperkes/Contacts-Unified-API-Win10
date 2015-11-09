@@ -112,8 +112,14 @@ namespace O365UnifiedContacts
         {
             if (_lastSelectedItem != null)
             {
-                //this.Resources.PersonMap.Center = _lastSelectedItem.Location;
-                //PersonMap.ZoomLevel = 14;
+                this.PersonMap.Center = _lastSelectedItem.Location;
+                PersonMap.ZoomLevel = 14;
+
+                MapIcon MapIcon1 = new MapIcon();
+                MapIcon1.Location = _lastSelectedItem.Location;
+                MapIcon1.NormalizedAnchorPoint = new Point(0.5, 1.0);
+                MapIcon1.Title = _lastSelectedItem.Item.DisplayName;
+                this.PersonMap.MapElements.Add(MapIcon1);
             }
         }
 

@@ -10,6 +10,7 @@
     NavigationCacheMode="Enabled"
     Loaded="PageRoot_Loaded"
     Unloaded="PageRoot_Unloaded"
+    xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Transitions>
         <TransitionCollection>
@@ -36,12 +37,42 @@
                 Text="{x:Bind Item.Item.DisplayName, Mode=OneWay}" />
         </StackPanel>
 
-        <TextBlock
-            Margin="12,8"
-            HorizontalAlignment="Left"
-            MaxWidth="560"
-            Style="{ThemeResource BodyTextBlockStyle}"
-            Text="{x:Bind Item.Item.Occupation, Mode=OneWay}"
-            EntranceNavigationTransitionInfo.IsTargetElement="True" />
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="148" 
+					   Height="98" 
+                       x:Name="personImage"
+					   >
+                        <Image.Source>
+                        <BitmapImage UriSource="{x:Bind Item.UserPhoto, Mode=OneWay}" />
+                        </Image.Source>
+                    </Image>
+                    <StackPanel Margin="8,0">
+                        <TextBlock
+                            Margin="0,4"
+                           Style="{ThemeResource SubtitleTextBlockStyle}"
+                           HorizontalAlignment="Left"
+                           Text="{x:Bind Item.OccupationCompany, Mode=OneWay}"  />
+                        <TextBlock 
+                            Style="{ThemeResource SubtitleTextBlockStyle}"
+                            HorizontalAlignment="Left"
+                            Text="{x:Bind Item.Item.EmailAddress, Mode=OneWay}" />
+                    </StackPanel>
+                </StackPanel>
+
+                <TextBlock
+					Margin="0,9"
+					HorizontalAlignment="Left"
+					MaxWidth="560"
+					Style="{ThemeResource BodyTextBlockStyle}"
+					Text="{x:Bind Item.DisplayAddress, Mode=OneWay}" />
+
+            <Maps:MapControl Loaded="PersonMap_Loaded"
+                    x:Name="PersonMap"
+                    MapServiceToken="wjDGVO88GUs5LLbQDLQP~8DsyQv1WErMWCp1inmG9qw~ApBA607Sb3YGEIoluIF_yIrOziUrnnfslrTdea3cR4X9-UVfxWT3x1HdWKBnAHZs"
+                    Height="560"
+                    Margin="0,0,0,0" Maps:MapControl.ZoomLevel="14" />
+
+        </StackPanel>
     </StackPanel>
 </Page>

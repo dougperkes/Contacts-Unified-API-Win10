@@ -10,6 +10,7 @@ using Windows.Foundation.Collections;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
@@ -51,7 +52,7 @@ namespace O365UnifiedContacts
 
             // Parameter is item ID
             Item = new ItemViewModel(ItemsDataSource.GetItemById((int)e.Parameter));
-
+            //UpdateMap();
             var backStack = Frame.BackStack;
             var backStackCount = backStack.Count;
 
@@ -74,10 +75,25 @@ namespace O365UnifiedContacts
             SystemNavigationManager.GetForCurrentView().BackRequested += DetailPage_BackRequested;
         }
 
+        private void UpdateMap()
+        {
+            if (Item != null)
+            {
+                this.PersonMap.Center = Item.Location;
+                PersonMap.ZoomLevel = 14;
+
+                MapIcon MapIcon1 = new MapIcon();
+                MapIcon1.Location = Item.Location;
+                MapIcon1.NormalizedAnchorPoint = new Point(0.5, 1.0);
+                MapIcon1.Title = Item.Item.DisplayName;
+                this.PersonMap.MapElements.Add(MapIcon1);
+            }
+        }
+
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
-
+            this.Item = null;
             SystemNavigationManager.GetForCurrentView().BackRequested -= DetailPage_BackRequested;
         }
 
@@ -85,7 +101,7 @@ namespace O365UnifiedContacts
         {
             // Page above us will be our master view.
             // Make sure we are using the "drill out" animation in this transition.
-
+            this.Item = null;
             Frame.GoBack(new DrillInNavigationTransitionInfo());
         }
 
@@ -156,5 +172,9 @@ namespace O365UnifiedContacts
             OnBackRequested();
         }
 
+        private void PersonMap_Loaded(object sender, RoutedEventArgs e)
+        {
+            UpdateMap();
+        }
     }
 }

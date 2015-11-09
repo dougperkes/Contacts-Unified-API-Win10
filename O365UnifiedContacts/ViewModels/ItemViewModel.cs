@@ -22,6 +22,31 @@ namespace O365UnifiedContacts.ViewModels
             this.Item = source;
         }
 
+        public string DisplayAddress
+        {
+            get
+            {
+                var s = Item.StreetAddress;
+                if (!string.IsNullOrEmpty(Item.StateFull))
+                {
+                    s += $", {Item.StateFull}";
+                }
+                if (!string.IsNullOrEmpty(Item.CountryFull))
+                {
+                    s += $", {Item.CountryFull}";
+                }
+                return s;
+            }
+        }
+
+        public string OccupationCompany
+        {
+            get
+            {
+                return $"{Item.Occupation}, {Item.Company}";
+            }
+        }
+
         public string UserPhoto
         {
             get

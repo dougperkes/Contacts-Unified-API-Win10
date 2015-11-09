@@ -22,56 +22,68 @@
 			<Grid Margin="0,11,0,13">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
-				</Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*" />
 					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
 
-				<TextBlock Text="{x:Bind Item.DisplayName}" Style="{ThemeResource BaseTextBlockStyle}" />
+				<TextBlock Text="{x:Bind Item.DisplayName}" Style="{ThemeResource BaseTextBlockStyle}" Grid.ColumnSpan="2" Grid.Row="0" />
 
-				<TextBlock
-					Text="{x:Bind Item.StreetAddress}"
-					Grid.Row="1"
+                <TextBlock
+					Text="{x:Bind Item.Occupation}"
+					Grid.Column="0"
+                    Grid.Row="1"
+					Margin="12,1,0,0"
+					Style="{ThemeResource ListCaptionAltTextblockStyle}" />
+
+                <TextBlock
+					Text="{x:Bind DisplayAddress}"
+					Grid.Row="2"
 					MaxLines="1"
 					Style="{ThemeResource ListBodyTextBlockStyle}" />
 
-				<TextBlock
-					Text="{x:Bind Item.Occupation}"
-					Grid.Column="1"
-					Margin="12,1,0,0"
-					Style="{ThemeResource ListCaptionAltTextblockStyle}" />
 			</Grid>
 		</DataTemplate>
 
 		<DataTemplate x:Key="DetailContentTemplate" x:DataType="viewmodels:ItemViewModel">
-			<StackPanel>
-				<Image Width="148" 
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="148" 
 					   Height="98" 
+                       x:Name="personImage"
 					   >
-					<Image.Source>
-						<BitmapImage UriSource="{x:Bind UserPhoto}" />
-					</Image.Source>
-				</Image>
-				<TextBlock
-					Margin="0,8"
-					Style="{ThemeResource TitleTextBlockStyle}"
-					HorizontalAlignment="Left"
-					Text="{x:Bind Item.DisplayName}"/>
+                        <Image.Source>
+                            <BitmapImage UriSource="{x:Bind UserPhoto}" />
+                        </Image.Source>
+                    </Image>
+                    <StackPanel Margin="8,0">
+                        <TextBlock x:Name="personName"
+					        Style="{ThemeResource TitleTextBlockStyle}"
+					        HorizontalAlignment="Left"
+					        Text="{x:Bind Item.DisplayName}"/>
+                        <TextBlock
+                            Margin="0,4"
+                           Style="{ThemeResource SubtitleTextBlockStyle}"
+                           HorizontalAlignment="Left"
+                           Text="{x:Bind OccupationCompany}" x:Name="personOccupation" />
+                        <TextBlock 
+                            Style="{ThemeResource SubtitleTextBlockStyle}"
+                            HorizontalAlignment="Left"
+                            Text="{x:Bind Item.EmailAddress}" />
+                    </StackPanel>
+                </StackPanel>
 
-				<TextBlock
+                <TextBlock
+                    
 					Margin="0,9"
 					HorizontalAlignment="Left"
 					MaxWidth="560"
 					Style="{ThemeResource BodyTextBlockStyle}"
-					Text="{x:Bind Item.StreetAddress}" />
-                <Maps:MapControl
-                    x:Name="PersonMap" Loaded="PersonMap_Loaded"
-                    MapServiceToken="wjDGVO88GUs5LLbQDLQP~8DsyQv1WErMWCp1inmG9qw~ApBA607Sb3YGEIoluIF_yIrOziUrnnfslrTdea3cR4X9-UVfxWT3x1HdWKBnAHZs"
-                    Height="560"
-                    Margin="0,0,0,0" Maps:MapControl.Location="{x:Bind Location}" Maps:MapControl.ZoomLevel="14" />
+					Text="{x:Bind DisplayAddress}" />
 
             </StackPanel>
 		</DataTemplate>
@@ -128,20 +140,29 @@
 				</Style>
 			</ListView.ItemContainerStyle>
 		</ListView>
+        <StackPanel
+            		Grid.Column="1"
+			        Grid.RowSpan="2"
+			        BorderThickness="1,0,0,0"
+			        Padding="24,0">
+            <ContentPresenter
+			        x:Name="DetailContentPresenter"
+			        BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
+			        Content="{x:Bind MasterListView.SelectedItem, Mode=OneWay}"
+			        ContentTemplate="{StaticResource DetailContentTemplate}">
+                <ContentPresenter.ContentTransitions>
+                    <!-- Empty by default. See MasterListView_ItemClick -->
+                    <TransitionCollection />
+                </ContentPresenter.ContentTransitions>
+            </ContentPresenter>
 
-		<ContentPresenter
-			x:Name="DetailContentPresenter"
-			Grid.Column="1"
-			Grid.RowSpan="2"
-			BorderThickness="1,0,0,0"
-			Padding="24,0"
-			BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
-			Content="{x:Bind MasterListView.SelectedItem, Mode=OneWay}"
-			ContentTemplate="{StaticResource DetailContentTemplate}">
-			<ContentPresenter.ContentTransitions>
-				<!-- Empty by default. See MasterListView_ItemClick -->
-				<TransitionCollection />
-			</ContentPresenter.ContentTransitions>
-		</ContentPresenter>
-	</Grid>
+            <Maps:MapControl
+                    x:Name="PersonMap" Loaded="PersonMap_Loaded"
+                    MapServiceToken="wjDGVO88GUs5LLbQDLQP~8DsyQv1WErMWCp1inmG9qw~ApBA607Sb3YGEIoluIF_yIrOziUrnnfslrTdea3cR4X9-UVfxWT3x1HdWKBnAHZs"
+                    Height="560"
+                    Margin="0,0,0,0" Maps:MapControl.ZoomLevel="14" />
+
+        </StackPanel>
+		
+    </Grid>
 </Page>
